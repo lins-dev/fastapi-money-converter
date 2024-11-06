@@ -3,7 +3,7 @@ from ...config import settings
 from fastapi import HTTPException
 from . import sync_convert_currency_action
 
-async def handle(from_currency: str, to_currencies: str, price: float) -> float:
+def handle(from_currency: str, to_currencies: str, price: float) -> float:
     currencies_list = to_currencies.split(',')
     result = []
     for currency in currencies_list:

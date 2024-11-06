@@ -1,4 +1,3 @@
-import requests
 import aiohttp
 from ...config import settings
 from fastapi import HTTPException
@@ -14,4 +13,4 @@ async def handle(from_currency: str, to_currencies: str, price: float):
     if ("Realtime Currency Exchange Rate" not in data):
         raise HTTPException(400, "Realtime Currency NOT in response!")
     exchange_rate = float(data ["Realtime Currency Exchange Rate"]["5. Exchange Rate"])
-    return price*exchange_rate
+    return {to_currencies : (price*exchange_rate)}
