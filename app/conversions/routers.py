@@ -3,6 +3,7 @@ from fastapi import Path
 from fastapi import Query
 from .actions import get_sync_list_of_currencies_and_call_covert_action
 from .actions import get_async_list_of_currencies_and_call_covert_action
+from .schemas import ConversionInput, ConversionOutput
 
 router = APIRouter(
     prefix="/conversions",
@@ -32,3 +33,12 @@ def show(
 ):
     res = get_sync_list_of_currencies_and_call_covert_action.handle(from_currency, to_currencies, price)
     return {"data" : res}
+
+@router.post('/async/{from_currency}', response_model=ConversionOutput)
+async def show(
+    body: ConversionInput,
+    from_currency: str = Path(regex='^[A-Z]{3}$')
+):
+    to_currencies = ",".join(map(str, body.to_currencies))
+    res = await get_async_list_of_currencies_and_call_covert_action.handle(from_currency, to_currencies, body.price)
+    return ConversionOutput(data=res)
